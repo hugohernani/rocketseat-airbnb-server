@@ -23,6 +23,7 @@ class PropertyController {
     const { latitude, longitude } = request.all()
 
     const properties = await Property.query()
+      .with('images')
       .nearBy(latitude, longitude, 10)
       .fetch()
 
@@ -62,7 +63,7 @@ class PropertyController {
    * @param {View} ctx.view
    */
   async show ({ params }) {
-    const property = Property.findOrFail(params.id)
+    const property = await Property.findOrFail(params.id)
 
     await property.load('image')
 
